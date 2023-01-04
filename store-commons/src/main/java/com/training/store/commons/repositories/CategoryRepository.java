@@ -1,0 +1,10 @@
+package com.training.store.commons.repositories;
+
+import com.training.store.commons.entities.Category;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSpecificationExecutor<Category> {
+
+}

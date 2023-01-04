@@ -1,9 +1,9 @@
 package com.training.store.commons.entities;
 
-import static javax.persistence.GenerationType.AUTO;
-
-import java.util.HashSet;
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,10 +13,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
+
+import static javax.persistence.GenerationType.AUTO;
 
 @Entity
 @Table(name = "category")
@@ -26,13 +26,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category {
-	@Id
-	@GeneratedValue(strategy = AUTO, generator = "seq_category")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = AUTO, generator = "seq_category")
+    private Long id;
 
-	private String name;
+    private String name;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
-	@Builder.Default
-	private Set<Product> products = new HashSet<>(0);
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+    @Builder.Default
+    private Set<Product> products = new HashSet<>(0);
+
+    public Category(String name, Set<Product> products) {
+        super();
+        this.name = name;
+        this.products = products;
+    }
+
+    public Category(String name) {
+        super();
+        this.name = name;
+    }
+
 }
