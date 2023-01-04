@@ -1,0 +1,42 @@
+spring:
+  profiles:
+    include: commons
+
+
+camel:
+  springboot:
+    name: CamelSpringBootDynamicRouterExample
+    jmx-enabled: false
+    shutdown-timeout: 30
+  component:
+    dynamic-router:
+      lazy-start-producer: true
+      bridge-error-handler: true
+  cloud:
+    enabled: false
+
+dynamic-router:
+  acacia-message:
+    channel: acacia-message
+    start-uri: "direct:start"
+#    start-uri: "activemq:queue:acacia-message"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+# To avoid conflict locally if you're launching api and orchestrator at the same time
+server:
+  port: 8081
+
+camel:
+  springboot:
+    tracing: true
