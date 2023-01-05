@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -61,6 +62,11 @@ public class Product {
     @Builder.Default
     @JsonIgnoreProperties("products")
     private Set<Supplier> suppliers = new HashSet<>(0);
+
+    @JsonProperty("categorieName")
+    public String getCategorieName() {
+        return this.category.getName();
+    }
 
     public Product(String name, String description, Float price, Category category) {
         super();

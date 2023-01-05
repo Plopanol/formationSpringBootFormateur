@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -28,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product save(Product p) {
+        updateCategorySiExistante(p);
         return productRepository.save(p);
     }
 
@@ -74,4 +76,13 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll();
     }
 
+    private void updateCategorySiExistante(Product p) {
+        if (p.getCategory().getId() != null) {
+            Optional<Category> catOpt = categoryRepository.findById(p.getCategory().getId());
+            if (catOpt.isPresent()) {
+                Category category = catOpt.get();
+                p.setCategory(category);
+            }
+        }
+    }
 }
