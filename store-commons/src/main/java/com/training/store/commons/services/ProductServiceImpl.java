@@ -2,6 +2,7 @@ package com.training.store.commons.services;
 
 import com.training.store.commons.entities.Category;
 import com.training.store.commons.entities.Product;
+import com.training.store.commons.repositories.CategoryRepository;
 import com.training.store.commons.repositories.ProductRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,45 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository2) {
+        productRepository = productRepository2;
+    }
+
+    @Override
     public Product save(Product p) {
         return productRepository.save(p);
+    }
+
+    @Override
+    public Product saveWithCategory(Product p, Category c) {
+        Category categorySave = categoryRepository.save(c);
+        p.setCategory(categorySave);
+        return productRepository.save(p);
+    }
+
+    @Override
+    public List<Product> findByCategory_Name(String nomCategorie) {
+        return productRepository.findByCategory_Name(nomCategorie);
+    }
+
+    @Override
+    public List<Product> findByCategory(String nomCategorie) {
+        return productRepository.findByCategory(nomCategorie);
+    }
+
+    @Override
+    public List<Product> findAll(String nomCategorie) {
+        Specification<Product> productSpec = Specification.where((product, cq, cb) -> cb.equal(product.get("category").get("name"), nomCategorie));
+        return productRepository.findAll(productSpec);
     }
 
     @Override
@@ -35,6 +67,11 @@ public class ProductServiceImpl implements ProductService {
      */
     static Specification<Product> hasCategory(Category category) {
         return (product, cq, cb) -> cb.equal(product.get("category"), category);
+    }
+
+    @Override
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
 }

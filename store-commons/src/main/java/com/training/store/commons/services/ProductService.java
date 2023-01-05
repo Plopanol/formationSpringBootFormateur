@@ -9,4 +9,16 @@ public interface ProductService {
 
     List<Product> findAllByCategorie(Category category);
 
+    Product save(Product p);
+
+    List<Product> findByCategory_Name(String nomCategorie);
+
+    List<Product> findByCategory(String nomCategorie);
+
+    List<Product> findAll(String nomCategorie);
+
+    Product saveWithCategory(Product p, Category c);
+
+    List<Product> findAll();
+
 }
