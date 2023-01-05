@@ -1,14 +1,15 @@
 package com.training.store.api.controllers;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-
 import com.training.store.commons.entities.Category;
 import com.training.store.commons.repositories.CategoryRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,8 @@ public class CategorieController {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(CategorieController.class);
 
     @GetMapping
     public List<Category> getCategories() {
@@ -35,6 +38,7 @@ public class CategorieController {
 
     @PostMapping
     public void save(@RequestBody Category category) {
+        logger.info("Category : " + category.getName());
         this.categoryRepository.save(category);
     }
 

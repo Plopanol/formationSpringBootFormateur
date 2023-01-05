@@ -3,11 +3,9 @@ package com.training.store.commons.entities;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,8 +32,6 @@ import static javax.persistence.GenerationType.AUTO;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class Product {
     @Id
     @GeneratedValue(strategy = AUTO, generator = "seq_product")
@@ -49,11 +45,12 @@ public class Product {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_product_category"))
-    @JsonManagedReference("product-category")
+    @JsonIgnoreProperties("products")
     private Category category;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     @Builder.Default
+    @JsonIgnoreProperties("product")
     private Set<OrderLine> orderLines = new HashSet<>(0);
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -62,6 +59,7 @@ public class Product {
         inverseJoinColumns = {
             @JoinColumn(name = "supplier_id", foreignKey = @ForeignKey(name = "fk_product_supplier_supplier"))})
     @Builder.Default
+    @JsonIgnoreProperties("products")
     private Set<Supplier> suppliers = new HashSet<>(0);
 
     public Product(String name, String description, Float price, Category category) {
@@ -71,5 +69,4 @@ public class Product {
         this.price = price;
         this.category = category;
     }
-
 }

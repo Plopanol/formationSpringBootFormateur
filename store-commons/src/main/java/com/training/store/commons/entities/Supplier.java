@@ -2,8 +2,8 @@ package com.training.store.commons.entities;
 
 import static javax.persistence.GenerationType.AUTO;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,5 +36,6 @@ public class Supplier {
 	
 	@ManyToMany(mappedBy = "suppliers", cascade = CascadeType.ALL) 
 	@Builder.Default
+	@JsonIgnoreProperties("suppliers")
 	private Set<Product> products = new HashSet<>(0);
 }

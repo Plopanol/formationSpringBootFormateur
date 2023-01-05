@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,9 +44,11 @@ public class Order {
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "customer_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_order_customer"))
+	@JsonIgnoreProperties("orders")
     private Customer customer;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.EAGER)
 	@Builder.Default
+	@JsonIgnoreProperties("order")
 	private Set<OrderLine> lines = new HashSet<>(0);
 }

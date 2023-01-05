@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,5 +46,6 @@ public class Customer {
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
 	@Builder.Default
+	@JsonIgnoreProperties("customer")
 	private Set<Order> orders = new HashSet<>(0);
 }
