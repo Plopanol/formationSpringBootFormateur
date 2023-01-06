@@ -27,6 +27,7 @@ public class InitDataBase implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
         logger.info("Base de donnée initialisée : Debut");
         Category catElectro = new Category("Electronique");
         productService.save(new Product("rasberyPie", "rasberyPie IV", 59.9f, catElectro));
