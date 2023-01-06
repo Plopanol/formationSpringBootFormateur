@@ -2,6 +2,9 @@ package com.training.store.commons.services;
 
 import com.training.store.commons.entities.Category;
 import com.training.store.commons.entities.Product;
+import com.training.store.commons.exceptions.AppErrorCode;
+import com.training.store.commons.exceptions.ErrorMessage;
+import com.training.store.commons.exceptions.GenericException;
 import com.training.store.commons.repositories.CategoryRepository;
 import com.training.store.commons.repositories.ProductRepository;
 
@@ -10,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +33,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product save(Product p) {
+        checkCategory(p);
         updateCategorySiExistante(p);
         return productRepository.save(p);
     }
@@ -37,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
     public Product saveWithCategory(Product p, Category c) {
         Category categorySave = categoryRepository.save(c);
         p.setCategory(categorySave);
+        checkCategory(p);
         return productRepository.save(p);
     }
 
@@ -84,5 +90,22 @@ public class ProductServiceImpl implements ProductService {
                 p.setCategory(category);
             }
         }
+    }
+
+    private void checkCategory(Product p) {
+        if (p.getCategory() == null) {
+            List<String> listemessage = new ArrayList<>();
+            listemessage.add("Manque ta catégorie");
+            listemessage.add("2eme service");
+            ErrorMessage errorMessage = new ErrorMessage(AppErrorCode.PRODUCT_CREATION_WITHOUT_CATEGORY, listemessage);
+            List<ErrorMessage> list = new ArrayList<>(0);
+            list.add(errorMessage);
+            throw new GenericException(list);
+        }
+    }
+
+    @Override
+    public void delete(Long productId) {
+        productRepository.deleteById(productId);
     }
 }

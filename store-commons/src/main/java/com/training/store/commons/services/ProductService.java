@@ -21,4 +21,6 @@ public interface ProductService {
 
     List<Product> findAll();
 
+    void delete(Long productId);
+
 }
